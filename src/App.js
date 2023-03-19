@@ -86,8 +86,9 @@ const Grid = styled.div`
 const App = () => {
     const [city, setCity] = useState("");
     const [weather, setWeather] = useState("");
+    const [error, setError] = useState(false);
 
-    const getWeather = () => {
+    const getWeather = async () => {
         fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=15ebeb9ae9a6bb955c251aff8c966b82`)
             .then(res => res.json())
             .then(result => {
@@ -103,7 +104,12 @@ const App = () => {
                 }
                 setWeather(weatherData);
                 console.log(result)
-            })
+            },
+                (error) => {
+                    console.log(error);
+                    setError(true);
+                }
+            )
     };
 
     const updateCity = (e) => {
