@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
 const PageContainer = styled.div`
@@ -35,20 +36,53 @@ const Input = styled.input`
     color: white;
     font-size: 1.2rem;
     padding: 0 1rem;
-    margin: 1rem 0;
+    margin: 1rem 1rem;
+`;
+
+const Button = styled.button`
+    height: 50px;
+    width: 50px;
+    border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.125);
+    background-color: #11192894;
+    color: white;
+    font-size: 0.5rem;
+    margin: 1rem 1rem ;
 `;
 
 
 const App = () => {
+    const [city, setCity] = useState("");
+    const [weather, setWeather] = useState("");
+    
+    const getWeather = async () => {
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.REACT_APP_WEATHER_API_KEY}`);
+        const data = await response.json();
+        setWeather(data);
+    }
+
+    const updateCity = (e) => {
+        setCity(e.target.value);
+        console.log(city);
+    }
+
+    const getSearch = (e) => {
+        e.preventDefault();
+        getWeather();
+    }
+
+
     return (
         <PageContainer>
             <WeatherContainer>
                 <h1>Weather App</h1>
-                <Input type="search" placeholder="Enter a city name..."/>
-                <input type="submit" value="Search"/>
-                <h2>City</h2>
-                <h3>Temperature</h3>
-                <h3>Weather</h3>
+                <form onSubmit={getSearch}>
+                    <Input type="text" placeholder="Enter City" onChange={updateCity} />
+                    <Button type="submit">Search</Button>
+                </form>
+                {/* <h2>{weather.name}</h2>
+                <h3>{weather.main.temp}</h3>
+                <h3>{weather.weather[0].main}</h3> */}
             </WeatherContainer>
         </PageContainer>
     );
