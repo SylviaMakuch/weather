@@ -21,7 +21,7 @@ const WeatherContainer = styled.div`
     width: 50vw;
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
-    background-color: #11192894;
+    background-color: #8593ad52;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.125);
     color: white;
@@ -57,11 +57,11 @@ const Button = styled.button`
 const Grid = styled.div`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    /* grid-template-rows: repeat(3, 1fr); */
     grid-column-gap: 1px;
     grid-row-gap: 1px;
     justify-items: center;
     align-items: flex-start;
+    width: 76%;
 `;
 
 const App = () => {
@@ -110,14 +110,17 @@ const App = () => {
                 </Form>
                 {weather.city && (
                     <Grid>
+                        <div>
                         <h2>{weather.city}</h2>
+                        <p> <small>{new Date().toLocaleDateString()} </small> </p>
+                        </div>
                         <br></br>
                         <div>
                             <img src={weather.icon} alt="weather icon" />
                             <p> {weather.description}
                             </p>
                         </div>
-                        {/* <p> <small>{new Date().toLocaleDateString()} </small> </p> */}
+
                         <div>
                             <p>Min</p>
                             <h3> {weather.temp_min}°C  </h3>
@@ -126,8 +129,10 @@ const App = () => {
                             <p>Max</p>
                             <h3> {weather.temp_max}°C </h3>
                         </div>
-
-                        <p>Humidity: {weather.humidity}</p>
+                        <div>
+                        <p>Humidity </p>
+                        <h3> {weather.humidity}% </h3>
+                        </div>
                     </Grid>
                 )}
             </WeatherContainer>
