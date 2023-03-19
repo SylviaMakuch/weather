@@ -17,23 +17,32 @@ const WeatherContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 50vh;
-    width: 50vw;
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
-    background-color: #8593ad52;
+    background-color: #475c8414;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.125);
-    color: white;
+    color: white; 
+    width: 90%;
+
+@media (min-width: 1120px) {
+    width: 50%;
+    height: 50%;
+}
+
+@media (max-width: 1120px) {
+    font-size: 0.8rem;
+}
 `;
 
 const Form = styled.form`
     display: flex;
+    align-items: center;
 `;
 
 const Input = styled.input`
     height: 50px;
-    width: 300px;
+    width: 50%;
     border-radius: 25px;
     border: 1px solid rgba(255, 255, 255, 0.125);
     background-color: #11192894;
@@ -41,6 +50,11 @@ const Input = styled.input`
     font-size: 1.2rem;
     padding: 0 1rem;
     margin: 1rem 1rem;
+
+@media (max-width: 1120px) {
+    height: 40px;
+    margin: 1rem 0.4rem ;
+}
 `;
 
 const Button = styled.button`
@@ -52,6 +66,11 @@ const Button = styled.button`
     color: white;
     font-size: 0.5rem;
     margin: 1rem 1rem ;
+
+    &:hover {
+        background-color: #111928;
+        cursor: pointer;
+    }
 `;
 
 const Grid = styled.div`
@@ -105,14 +124,15 @@ const App = () => {
             <WeatherContainer>
                 <h1>Weather App</h1>
                 <Form onSubmit={getSearch}>
+
                     <Input type="text" placeholder="Enter City" onChange={updateCity} />
                     <Button type="submit">Search</Button>
                 </Form>
                 {weather.city && (
                     <Grid>
                         <div>
-                        <h2>{weather.city}</h2>
-                        <p> <small>{new Date().toLocaleDateString()} </small> </p>
+                            <h2>{weather.city}</h2>
+                            <p> <small>{new Date().toLocaleDateString()} </small> </p>
                         </div>
                         <br></br>
                         <div>
@@ -130,8 +150,8 @@ const App = () => {
                             <h3> {weather.temp_max}°C </h3>
                         </div>
                         <div>
-                        <p>Humidity </p>
-                        <h3> {weather.humidity}% </h3>
+                            <p>Humidity </p>
+                            <h3> {weather.humidity}% </h3>
                         </div>
                     </Grid>
                 )}
