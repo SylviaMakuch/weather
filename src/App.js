@@ -27,6 +27,10 @@ const WeatherContainer = styled.div`
     color: white;
 `;
 
+const Form = styled.form`
+    display: flex;
+`;
+
 const Input = styled.input`
     height: 50px;
     width: 300px;
@@ -63,12 +67,12 @@ const App = () => {
 
     const updateCity = (e) => {
         setCity(e.target.value);
-        console.log(city);
     }
 
     const getSearch = (e) => {
         e.preventDefault();
         getWeather();
+        console.log(weather);
     }
 
 
@@ -76,10 +80,10 @@ const App = () => {
         <PageContainer>
             <WeatherContainer>
                 <h1>Weather App</h1>
-                <form onSubmit={getSearch}>
+                <Form onSubmit={getSearch}>
                     <Input type="text" placeholder="Enter City" onChange={updateCity} />
                     <Button type="submit">Search</Button>
-                </form>
+                </Form>
                 {/* <h2>{weather.name}</h2>
                 <h3>{weather.main.temp}</h3>
                 <h3>{weather.weather[0].main}</h3> */}
