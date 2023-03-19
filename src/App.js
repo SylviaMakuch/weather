@@ -54,40 +54,51 @@ const Button = styled.button`
     margin: 1rem 1rem ;
 `;
 
+const Grid = styled.div`
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* grid-template-rows: repeat(3, 1fr); */
+    grid-column-gap: 1px;
+    grid-row-gap: 1px;
+    justify-items: center;
+    align-items: flex-start;
+`;
 
 const App = () => {
     const [city, setCity] = useState("");
     const [weather, setWeather] = useState("");
-    
-    const getWeather =  () => {
+
+    const getWeather = () => {
         fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=15ebeb9ae9a6bb955c251aff8c966b82`)
-        .then(res => res.json())
-        .then(result => {
-            const weatherData = {
-                city: result.name,
-                temp: result.main.temp,
-                feels_like: result.main.feels_like,
-                temp_min: result.main.temp_min,
-                temp_max: result.main.temp_max,
-                humidity: result.main.humidity,
-                description: result.weather[0].description,
-                timezone: result.timezone,
-            }
-            setWeather(weatherData);
-          console.log(weather)
-        })
-    }
+            .then(res => res.json())
+            .then(result => {
+                const weatherData = {
+                    city: result.name,
+                    temp: result.main.temp,
+                    feels_like: result.main.feels_like,
+                    temp_min: KtoC(result.main.temp_min),
+                    temp_max: KtoC(result.main.temp_max),
+                    humidity: result.main.humidity,
+                    description: result.weather[0].description,
+                    icon: `https://openweathermap.org/img/wn/${result.weather[0].icon}@2x.png`,
+                }
+                setWeather(weatherData);
+                console.log(result)
+            })
+    };
 
     const updateCity = (e) => {
         setCity(e.target.value);
-    }
+    };
 
     const getSearch = (e) => {
         e.preventDefault();
         getWeather();
+    };
 
-    }
-
+    function KtoC(K) {
+        return Math.floor(K - 273.15);
+    };
 
     return (
         <PageContainer>
@@ -98,21 +109,30 @@ const App = () => {
                     <Button type="submit">Search</Button>
                 </Form>
                 {weather.city && (
-                    <div>
-                        <p>{weather.city}</p>
-                        <p> Today's Date: </p>
-                        <p>Weather: {weather.description}</p>
-                        <p>Temperature: {weather.temp}</p>
-                        <p>Feels like: {weather.feels_like}</p>
-                        <p>Min Temp Today: {weather.temp_min}</p>
-                        <p>Max Temp Today: {weather.temp_max}</p>
+                    <Grid>
+                        <h2>{weather.city}</h2>
+                        <br></br>
+                        <div>
+                            <img src={weather.icon} alt="weather icon" />
+                            <p> {weather.description}
+                            </p>
+                        </div>
+                        {/* <p> <small>{new Date().toLocaleDateString()} </small> </p> */}
+                        <div>
+                            <p>Min</p>
+                            <h3> {weather.temp_min}°C  </h3>
+                        </div>
+                        <div>
+                            <p>Max</p>
+                            <h3> {weather.temp_max}°C </h3>
+                        </div>
+
                         <p>Humidity: {weather.humidity}</p>
-                        <p>Time Zone: {weather.timezone}</p>
-                    </div>
+                    </Grid>
                 )}
             </WeatherContainer>
         </PageContainer>
     );
-    }
+}
 
 export default App;
