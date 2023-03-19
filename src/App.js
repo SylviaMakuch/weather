@@ -59,10 +59,23 @@ const App = () => {
     const [city, setCity] = useState("");
     const [weather, setWeather] = useState("");
     
-    const getWeather = async () => {
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.REACT_APP_WEATHER_API_KEY}`);
-        const data = await response.json();
-        setWeather(data);
+    const getWeather =  () => {
+        fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=15ebeb9ae9a6bb955c251aff8c966b82`)
+        .then(res => res.json())
+        .then(result => {
+            const weatherData = {
+                city: result.name,
+                temp: result.main.temp,
+                feels_like: result.main.feels_like,
+                temp_min: result.main.temp_min,
+                temp_max: result.main.temp_max,
+                humidity: result.main.humidity,
+                description: result.weather[0].description,
+                timezone: result.timezone,
+            }
+            setWeather(weatherData);
+          console.log(weather)
+        })
     }
 
     const updateCity = (e) => {
@@ -72,7 +85,7 @@ const App = () => {
     const getSearch = (e) => {
         e.preventDefault();
         getWeather();
-        console.log(weather);
+
     }
 
 
@@ -84,9 +97,19 @@ const App = () => {
                     <Input type="text" placeholder="Enter City" onChange={updateCity} />
                     <Button type="submit">Search</Button>
                 </Form>
-                {/* <h2>{weather.name}</h2>
-                <h3>{weather.main.temp}</h3>
-                <h3>{weather.weather[0].main}</h3> */}
+                {weather.city && (
+                    <div>
+                        <p>{weather.city}</p>
+                        <p> Today's Date: </p>
+                        <p>Weather: {weather.description}</p>
+                        <p>Temperature: {weather.temp}</p>
+                        <p>Feels like: {weather.feels_like}</p>
+                        <p>Min Temp Today: {weather.temp_min}</p>
+                        <p>Max Temp Today: {weather.temp_max}</p>
+                        <p>Humidity: {weather.humidity}</p>
+                        <p>Time Zone: {weather.timezone}</p>
+                    </div>
+                )}
             </WeatherContainer>
         </PageContainer>
     );
