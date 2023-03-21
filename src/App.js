@@ -25,7 +25,7 @@ const WeatherContainer = styled.div`
     color: white; 
     width: 90%;
 
-@media (min-width: 1120px) {
+@media (min-width: 1020px) {
     width: 50%;
     height: 50%;
 }
@@ -38,6 +38,7 @@ const WeatherContainer = styled.div`
 const Form = styled.form`
     display: flex;
     align-items: center;
+    justify-content: center;
 `;
 
 const Input = styled.input`
@@ -52,7 +53,6 @@ const Input = styled.input`
     margin: 1rem 1rem;
 
 @media (max-width: 1120px) {
-    height: 40px;
     margin: 1rem 0.4rem ;
 }
 `;
@@ -60,12 +60,13 @@ const Input = styled.input`
 const Button = styled.button`
     height: 50px;
     width: 50px;
-    border-radius: 25px;
+    border-radius: 50%;
     border: 1px solid rgba(255, 255, 255, 0.125);
     background-color: #11192894;
     color: white;
     font-size: 0.5rem;
     margin: 1rem 1rem ;
+    font-weight: bold;
 
     &:hover {
         background-color: #111928;
@@ -78,9 +79,13 @@ const Grid = styled.div`
     grid-template-columns: repeat(3, 1fr);
     grid-column-gap: 1px;
     grid-row-gap: 1px;
-    justify-items: center;
-    align-items: flex-start;
+    justify-items: start;
+    align-items: center;
     width: 76%;
+
+    @media (max-width: 380px) {
+        width: 95%;
+    }
 `;
 
 const App = () => {
