@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const PageContainer = styled.div`
@@ -77,45 +77,54 @@ const Button = styled.button`
 const Grid = styled.div`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-column-gap: 1px;
-    grid-row-gap: 1px;
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 2rem;
+    grid-row-gap: 2rem;
     justify-items: start;
     align-items: center;
-    width: 76%;
 
-    @media (max-width: 380px) {
-        width: 95%;
+    @media (max-width: 420px) {
+        grid-column-gap: 2rem;
+        grid-row-gap: 2rem;
     }
 `;
 
 const App = () => {
     const [city, setCity] = useState("");
     const [weather, setWeather] = useState("");
-    const [error, setError] = useState(false);
+    const [weatherResults, setWeatherResults] = useState("");
+
 
     const getWeather = async () => {
-        fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=15ebeb9ae9a6bb955c251aff8c966b82`)
-            .then(res => res.json())
-            .then(result => {
-                const weatherData = {
-                    city: result.name,
-                    temp: result.main.temp,
-                    feels_like: result.main.feels_like,
-                    temp_min: KtoC(result.main.temp_min),
-                    temp_max: KtoC(result.main.temp_max),
-                    humidity: result.main.humidity,
-                    description: result.weather[0].description,
-                    icon: `https://openweathermap.org/img/wn/${result.weather[0].icon}@2x.png`,
-                }
-                setWeather(weatherData);
-                console.log(result)
-            },
-                (error) => {
-                    console.log(error);
-                    setError(true);
-                }
-            )
+        try {
+            fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=15ebeb9ae9a6bb955c251aff8c966b82`)
+                .then(res => res.json())
+                .then(data => {
+            
+                    if (data.cod === 200) {
+                        setWeather({
+                            city: data.name,
+                            temp_min: KtoC(data.main.temp_min),
+                            temp_max: KtoC(data.main.temp_max),
+                            humidity: data.main.humidity,
+                            description: data.weather[0].description,
+                            icon: `http://openweathermap.org/img/w/${data.weather[0].icon}.png`
+                        });
+                    }
+                    else {
+                        alert("Please enter a valid city name");
+                    }
+                });
+        } catch (error) {
+            alert("City not found");
+        }
     };
+
+    function KtoC(K) {
+        return Math.floor(K - 273.15);
+    };
+
+
 
     const updateCity = (e) => {
         setCity(e.target.value);
@@ -124,10 +133,6 @@ const App = () => {
     const getSearch = (e) => {
         e.preventDefault();
         getWeather();
-    };
-
-    function KtoC(K) {
-        return Math.floor(K - 273.15);
     };
 
     return (
@@ -141,11 +146,10 @@ const App = () => {
                 </Form>
                 {weather.city && (
                     <Grid>
-                        <div>
+                        <div style={{ gridArea : "1 / 1 / 2 / 3"}}>
                             <h2>{weather.city}</h2>
                             <p> <small>{new Date().toLocaleDateString()} </small> </p>
                         </div>
-                        <br></br>
                         <div>
                             <img src={weather.icon} alt="weather icon" />
                             <p> {weather.description}
